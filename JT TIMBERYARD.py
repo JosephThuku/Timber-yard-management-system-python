@@ -24,7 +24,7 @@ from requests.auth import HTTPBasicAuth
 #The consumer key and secret is for JTTIMBERYARD SAND BOX
 def mpay():
     consumer_key = ""  # Consumer Key
-    consumer_secret = "HDJOupIf0HCaLGQ0"  # Consumer Secret
+    consumer_secret = ""  # Consumer Secret
     api_URL = "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
 
     r = requests.get(api_URL, auth=HTTPBasicAuth(consumer_key, consumer_secret))
