@@ -19,11 +19,11 @@ import base64
 from requests.auth import HTTPBasicAuth
 
 
-# ========================================VARIABLES#===============================================================================================================================================
+# ========================================Function for lipa na mpesa===============================================================================================================================================
 #requesting lipa na mpesa from safaricom daraja API.
 #The consumer key and secret is for JTTIMBERYARD SAND BOX
 def mpay():
-    consumer_key = "DLAoWxSG7G7IGqtB29O5VONkXZdKxG9M"  # Consumer Key
+    consumer_key = ""  # Consumer Key
     consumer_secret = "HDJOupIf0HCaLGQ0"  # Consumer Secret
     api_URL = "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
 
