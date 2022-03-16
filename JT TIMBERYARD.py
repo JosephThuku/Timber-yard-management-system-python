@@ -5,7 +5,7 @@ import datetime
 import tkinter.ttk as ttk
 import os
 import tempfile
-# import pkg_resources.py2_warn
+#import pkg_resources.py2_warn
 
 import sys
 import time
@@ -20,8 +20,8 @@ from requests.auth import HTTPBasicAuth
 
 
 # ========================================Function for lipa na mpesa===============================================================================================================================================
-#requesting lipa na mpesa from safaricom daraja API.
-#The consumer key and secret is for JTTIMBERYARD SAND BOX
+# requesting lipa na mpesa from safaricom daraja API.
+# The consumer key and secret is for JTTIMBERYARD SAND BOX
 def mpay():
     consumer_key = ""  # Consumer Key
     consumer_secret = ""  # Consumer Secret
@@ -67,14 +67,15 @@ def mpay():
 
     print(response.text)
 
-#Now we create the lipa na M-pesa window menu
+
+# Now we create the lipa na M-pesa window menu
 
 def lipanampesa():
     global payments, PHONE, currentorder, lbl_error, amountpayable
     payments = Tk()
     payments.title("Lipa Na Mpesa")
     width = 700
-    height = 520
+    height = 600
     screen_width = payments.winfo_screenwidth()
     screen_height = payments.winfo_screenheight()
     x = (screen_width / 2) - (width / 2)
@@ -92,18 +93,25 @@ def lipanampesa():
     MidLoginForm.pack(side=TOP, pady=50)
     lbl_password = Label(MidLoginForm, text="PHONE NUMBER:", font=('arial', 25), bd=18)
     lbl_password.grid(row=1)
-    lbl_error = Label(MidLoginForm, text="ENTER PHONE NUMBER TO RECQUEST PAYMENTS e.g :254110919165", font=('arial', 16), bd=18, fg="red")
-    lbl_error.grid(row=3, columnspan=2, pady=20)
+    lbl_error = Label(MidLoginForm, text="ENTER PHONE NUMBER TO RECQUEST PAYMENTS e.g :254110919165",
+                      font=('arial', 16), bd=18, fg="red")
+    lbl_error.grid(row=5, columnspan=2, pady=20)
 
     PHONE = Entry(MidLoginForm, textvariable=PHONE, font=('arial', 25), width=15)
     PHONE.grid(row=1, column=1)
 
-    btn_login = Button(MidLoginForm, text="Recieve", font=('arial', 18), width=30, bg="green", command=mpay)
+    btn_login = Button(MidLoginForm, text="SAFARICOM", font=('arial', 18), width=30, bg="green", command=mpay)
     btn_login.grid(row=2, columnspan=2, pady=20)
+
+    btn_login = Button(MidLoginForm, text="Recieve PAYMENTS", font=('arial', 18), width=30, bg="green", command=saveoders)
+    btn_login.grid(row=4, columnspan=2, pady=20)
+
+    btn_login = Button(MidLoginForm, text="AIRTEL", font=('arial', 18), width=30, bg="brown", command=mpay)
+    btn_login.grid(row=3, columnspan=2, pady=20)
     currentorder.focus
 
 
-#DECLEARING THE VARIABLES FOR ROOT
+# DECLEARING THE VARIABLES FOR ROOT
 
 root = Tk()
 root.title("JT  TIMBER YARD")
@@ -127,7 +135,7 @@ WOODSIZE = StringVar()
 
 
 # ========================================CREATING THE SQLITE-3 DATABASE==================================================================================================================================================
-#Not we can change it to mysql database
+# Not we can change it to mysql database
 def Database():
     global conn, cursor
     conn = sqlite3.connect("pythontut.db")
@@ -139,16 +147,15 @@ def Database():
     cursor.execute(
         "CREATE TABLE IF NOT EXISTS `employees` (emp_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, IDNO TEXT, FNAME TEXT, POSITION TEXT, PNUM TEXT, date DATE NOT NULL DEFAULT current_date)")
     cursor.execute(
-        "CREATE TABLE IF NOT EXISTS `Orderz` (order_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, OrderNum TEXT, item TEXT, wood_size TEXT, quantity INTEGER, wood_price INTEGER, total INTEGER, date DATE NOT NULL DEFAULT current_date,waiter TEXT)")
+        "CREATE TABLE IF NOT EXISTS `Orderz` (order_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, OrderNum TEXT, item TEXT, muigana TEXT, quantity INTEGER, thogora INTEGER, total INTEGER, date DATE NOT NULL DEFAULT current_date,waiter TEXT)")
     cursor.execute(
         "CREATE TABLE IF NOT EXISTS `ordernumbers` (ordernum_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, ordernum TEXT, total INTEGER, amount_paid INTEGER, date DATE NOT NULL DEFAULT current_date)")
-    #cursor.execute("ALTER TABLE Orderz ADD wood_size TEXT")
+    # cursor.execute("DROP TABLE Orderz")
 
     cursor.execute("SELECT * FROM `admin` WHERE `username` = 'admin' AND `password` = 'admin'")
     if cursor.fetchone() is None:
-        cursor.execute("INSERT INTO `admin` (username, password,usertype) VALUES('admin', 'admin', 'admin', 'Admin')")
+        cursor.execute("INSERT INTO `admin` (username, password,usertype) VALUES('admin', 'admin', 'Admin')")
         conn.commit()
-
 
 
 # ========================================exit#===============================================================================================================================================
@@ -188,7 +195,8 @@ def LoginForm():
     TopLoginForm.pack(side=TOP, pady=20)
     lbl_text = Label(TopLoginForm, text="JT TIMBER YARD LOGIN ", font=('arial', 18), width=600)
     lbl_text.pack(fill=X)
-    lbl_text = Label(TopLoginForm, text="Enter your user name, password, and user type  ", font=('arial', 18),fg="red", width=600)
+    lbl_text = Label(TopLoginForm, text="Enter your user name, password, and user type  ", font=('arial', 18), fg="red",
+                     width=600)
     lbl_text.pack(side=TOP, fill=X)
     MidLoginForm = Frame(loginform, width=600)
     MidLoginForm.pack(side=TOP, pady=50)
@@ -339,21 +347,25 @@ def update_stock():
 
     TopLoginForm = Frame(NEWSTOCK, width=600, height=100, bd=1, relief=SOLID)
     TopLoginForm.pack(side=TOP, pady=20)
-    # lbl_text = Label(TopLoginForm, text="Recieve Payments", font=('arial', 18), width=600)
-    # lbl_text.pack(fill=X)
+    lbl_text = Label(TopLoginForm, text="UPDATE WOOD STOCK", font=('arial',18), width=600)
+    lbl_text.pack(fill=X)
     MidLoginForm = Frame(NEWSTOCK, width=600)
     MidLoginForm.pack(side=TOP, pady=50)
 
     # Defining the labels for the add new stock
 
+
     lbl_username = Label(MidLoginForm, text="wood Type:", font=('arial', 25), bd=18)
     lbl_username.grid(row=0)
 
-    lbl_password = Label(MidLoginForm, text="NEW FEETS:", font=('arial', 25), bd=18)
-    lbl_password.grid(row=1)
+    lbl_username = Label(MidLoginForm, text="wood SIZE:", font=('arial', 25), bd=18)
+    lbl_username.grid(row=1)
 
-    lbl_password = Label(MidLoginForm, text="New FEET:", font=('arial', 25), bd=18)
+    lbl_password = Label(MidLoginForm, text="NEW FEETS:", font=('arial', 25), bd=18)
     lbl_password.grid(row=2)
+
+    #lbl_password = Label(MidLoginForm, text="New FEET:", font=('arial', 25), bd=18)
+    #lbl_password.grid(row=2)
 
     Database()
     cursor.execute("select wood_type FROM Products")
@@ -368,25 +380,38 @@ def update_stock():
                             font=('arial', 25))
     WoodType.grid(row=0, column=1)
 
+    cursor.execute("select wood_size FROM Products")
+    fetch = cursor.fetchall()
+    ids = {}
+    for row in fetch:
+        ids[row[0]] = [str(size) for size in row[0].split(',')]
+
+    # Now we create the entry fields
+
+    WOODSIZE = ttk.Combobox(MidLoginForm, values=list(ids.values()), width=15, textvariable=WOODSIZE,
+                            font=('arial', 20))
+    WOODSIZE.grid(row=1, column=1)
+
     newqty = Entry(MidLoginForm, textvariable=newqty, font=('arial', 25), width=15)
-    newqty.grid(row=1, column=1)
+    newqty.grid(row=2, column=1)
 
     btn_login = Button(MidLoginForm, text="Update", font=('arial', 18), width=30, command=Reset)
-    btn_login.grid(row=2, columnspan=2, pady=20)
+    btn_login.grid(row=3, columnspan=2, pady=20)
 
 
 def Reset():
     if (int(newqty.get()) > 1):
         Database()
-        cursor.execute("select wood_type, wood_size, total_feet FROM `Products` WHERE `wood_type` LIKE ?",
-                       ('%' + str(WoodType.get()) + '%',))
+        cursor.execute("select wood_type, wood_size, total_feet FROM `Products` WHERE `wood_type` LIKE ? AND "
+                       "`wood_size` LIKE ?",('%' + str(WoodType.get()) + '%','%' + str(WOODSIZE.get()) + '%'))
         fetch = cursor.fetchall()
         for row in fetch:
-            calc = (int(row[1])) + int(newqty.get())
-        cursor.execute("UPDATE Products SET total_feet = ? WHERE wood_type = ?", (calc, WoodType.get()))
+            calc = (int(row[2])) + int(newqty.get())
+        cursor.execute("UPDATE Products SET total_feet = ? WHERE wood_type = ? AND wood_size =?", (calc, WoodType.get(), WOODSIZE.get()))
         result = tkMessageBox.showinfo('stock successfully updated....................!', icon="warning")
         if result == 'yes':
             WoodType.delete(0, END)
+
             newqty.delete(0, END)
 
         conn.commit()
@@ -484,7 +509,7 @@ def Home():
 # ===============FUNCTION TO SHOW OUR AVAILABLE WOOD TYPE, WOOD SIZE AND FEET#==========================================
 def instock():
     instock = Tk()
-    instock.title("AVAILABLE STOCK );")
+    instock.title("JTYARD AVAILABLE STOCK );")
     width = 400
     height = 400
     screen_width = instock.winfo_screenwidth()
@@ -506,7 +531,8 @@ def instock():
 
     scrollbary = Scrollbar(MidLoginForm, orient=VERTICAL)
     scrollbarx = Scrollbar(MidLoginForm, orient=HORIZONTAL)
-    viewcartz = ttk.Treeview(MidLoginForm, columns=("Wood Type", "Wood Size", "FEET Instock"), selectmode="extended",
+    viewcartz = ttk.Treeview(MidLoginForm, columns=("Wood Type", "Wood Size", "Wood price", "FEET Instock"),
+                             selectmode="extended",
                              height=12, yscrollcommand=scrollbary.set, xscrollcommand=scrollbarx.set)
     scrollbary.config(command=viewcartz.yview)
     scrollbary.pack(side=RIGHT, fill=Y)
@@ -514,15 +540,18 @@ def instock():
     scrollbarx.pack(side=BOTTOM, fill=X)
     viewcartz.heading('Wood Type', text="Wood Type", anchor=W)
     viewcartz.heading('Wood Size', text="Wood Size", anchor=W)
+    viewcartz.heading('Wood price', text="Wood price", anchor=W)
     viewcartz.heading('FEET Instock', text="FEET Instock", anchor=W)
     viewcartz.column('#0', stretch=YES, minwidth=0, width=10)
     viewcartz.column('#1', stretch=YES, minwidth=0, width=100)
     viewcartz.column('#2', stretch=NO, minwidth=0, width=100)
+    viewcartz.column('#3', stretch=NO, minwidth=0, width=100)
     viewcartz.pack(side=TOP, fill=X)
 
     Database()
-    cursor.execute("select wood_type, wood_size, total_feet-sum(quantity) as 'sold' from Products, Orderz where "
-                   "wood_type = item group by wood_type;")
+    cursor.execute(
+        "select wood_type, wood_size,wood_price, total_feet-sum(quantity) as 'sold' from Products, Orderz where "
+        "wood_type = item AND wood_size=muigana group by wood_type;")
     fetch = cursor.fetchall()
     for data in fetch:
         viewcartz.insert('', 'end', values=(data))
@@ -829,7 +858,8 @@ def addtocart():
         global Orders, OrderNum, Sum
         OrderNum = ("RMS00" + str(ordernum + 1))
         Database()
-        cursor.execute("SELECT wood_type, wood_size, total_feet, wood_price FROM `Products` WHERE `wood_type` LIKE ?",('%' + str(ITEM.get()) + '%',))
+        cursor.execute("SELECT wood_type, wood_size, total_feet, wood_price FROM `Products` WHERE `wood_type` LIKE ?",
+                       ('%' + str(ITEM.get()) + '%',))
         rows = cursor.fetchone()
         for row in rows:
 
@@ -850,7 +880,7 @@ def addtocart():
                 else:
                     LBL_ERROR.config(text="", fg="red")
                     total = int(total_feet.get()) * wood_price
-                    Orders = [(OrderNum, ITEM.get(),WOODSIZE.get(), int(total_feet.get()), wood_price, total, WNAME)]
+                    Orders = [(OrderNum, ITEM.get(), WOODSIZE.get(), int(total_feet.get()), wood_price, total, WNAME)]
                     cart.extend(Orders)
                     chekicart()
                     ITEM.delete(0, END)
@@ -871,7 +901,7 @@ def chekicart():
 def vieworderz():
     Database()
     cursor.execute(
-        "SELECT OrderNum, item, wood_size, quantity, wood_price, total FROM `Orderz` where quantity > '0' ORDER BY order_id DESC")
+        "SELECT OrderNum, item, muigana, quantity, thogora, total FROM `Orderz` where quantity > '0' ORDER BY order_id DESC")
     fetch = cursor.fetchall()
     for data in fetch:
         vieworders.insert('', 'end', values=(data))
@@ -901,7 +931,7 @@ def reciept_pdf():
         onn = str(cols[0])
         stt = str(cols[1])
 
-    cursor.execute("select OrderNum, item, wood_size, quantity, wood_price, total FROM `Orderz` WHERE OrderNum='%s'" % (onn))
+    cursor.execute("select OrderNum, item, muigana, quantity, thogora, total FROM `Orderz` WHERE OrderNum='%s'" % (onn))
     vitu = cursor.fetchall()
     pdf.cell(5, 1, 'wood type', 0)
     pdf.cell(5, 1, 'wood size', 0)
@@ -934,7 +964,7 @@ def reciept_pdf():
 def printorder():
     Database()
     cursor.execute(
-        "SELECT OrderNum, waiter, item, wood_size, quantity, wood_price, total, date FROM `Orderz` ORDER BY order_id DESC")
+        "SELECT OrderNum, waiter, item, muigana, quantity, thogora, total, date FROM `Orderz` ORDER BY order_id DESC")
     fetch = cursor.fetchall()
     pdf = FPDF('l', 'mm', 'A4')
     pdf.add_page('l')
@@ -975,7 +1005,8 @@ def saveoders():
         cursor.execute('insert into ordernumbers (ordernum) values("%s")' % (OrderNum))
         for t in cart:
             cursor.execute(
-                "INSERT INTO `Orderz` (OrderNum, item, wood_size, quantity, wood_price, total, waiter) VALUES(?,?,?,?,?,?,?)", t)
+                "INSERT INTO `Orderz` (OrderNum, item, muigana, quantity, thogora, total, waiter) VALUES(?,?,?,?,?,?,?)",
+                t)
             cursor.execute("select ordernum FROM ordernumbers ORDER BY ordernum_id DESC LIMIT 1")
             onum = cursor.fetchone()
             p = str(onum[0])
@@ -988,7 +1019,7 @@ def saveoders():
         create_ordernum()
         LBL_TOTAL.config(text="", fg="brown")
 
-# Clear the left treeview
+        # Clear the left treeview
 
         vieworders.delete(*vieworders.get_children())
         vieworderz()
@@ -1122,12 +1153,11 @@ def Cashier():
     btn_s = Button(LeftFormt, text="Add to Cart", width=18, font=('arial', 12), bg="#009ACD", command=addtocart)
     btn_s.grid(row=4, column=1, pady=10)
 
-#creating the LEFT tree frame
+    # creating the LEFT tree frame
 
     LeftFormm = Frame(LeftForm, bd=3, width=x, bg="powder blue", relief=RAISED, height=60)
     LeftFormm.pack(side=TOP, fill='both', expand=False)
-     #cart view
-
+    # cart view
 
     scrollbary = Scrollbar(LeftFormm, orient=VERTICAL)
     scrollbarx = Scrollbar(LeftFormm, orient=HORIZONTAL)
@@ -1135,7 +1165,8 @@ def Cashier():
 
     scrollbary = Scrollbar(LeftFormm, orient=VERTICAL)
     scrollbarx = Scrollbar(LeftFormm, orient=HORIZONTAL)
-    viewcartz = ttk.Treeview(LeftFormm, columns=("Order Number", "Wood Type","Wood Size", "Total Feet", "Wood Price", "Total price"),
+    viewcartz = ttk.Treeview(LeftFormm, columns=(
+    "Order Number", "Wood Type", "Wood Size", "Total Feet", "Wood Price", "Total price"),
                              selectmode="extended", height=12, yscrollcommand=scrollbary.set,
                              xscrollcommand=scrollbarx.set)
     scrollbary.config(command=viewcartz.yview)
